@@ -1,0 +1,25 @@
+.wrapper {
+	width: 400px;
+	height: 60px;
+	p {
+		width: 10%;
+		float: left;
+	}
+	.nested {
+		border: 1px solid black;
+		width: 70%;
+		height: 100%;
+		position: relative;
+		margin-left: 20px;
+		float: left;
+	}
+
+	.commontype {
+		border: 1px dashed black;
+		width: 70%;
+		height: 60%;
+		position: relative;
+		margin-left: 20px;
+		float: left;
+	}
+}

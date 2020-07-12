@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@formily/antd": "^1.2.0-beta.7",
+    "@formily/antd-components": "^1.2.0-beta.7",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -10,10 +12,15 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "antd": "^4.3.5",
+    "lodash": "^4.17.19",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "react-sortablejs": "^2.0.11",
+    "typescript": "~3.7.2",
+    "utility-types": "^3.10.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.157",
+    "@types/sortablejs": "^1.10.4"
   }
 }
