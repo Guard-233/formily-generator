@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { SchemaForm, ISchema } from "@formily/antd";
+import {
+	SchemaForm,
+	ISchema,
+	FormButtonGroup,
+	Submit,
+	Reset,
+} from "@formily/antd";
 import { Modal, Button } from "antd";
 import {
 	Input,
@@ -17,6 +23,7 @@ import {
 	Transfer,
 	FormCard,
 	ArrayTable,
+	ArrayCards,
 } from "@formily/antd-components";
 
 const BuiltInComponents = {
@@ -48,6 +55,7 @@ const LayoutComponents = {
 
 const ArrayComponents = {
 	ArrayTable,
+	ArrayCards,
 };
 
 export const Preview = (props: ISchema) => {
@@ -98,7 +106,14 @@ export const Preview = (props: ISchema) => {
 						...ArrayComponents,
 					}}
 					schema={props}
-				></SchemaForm>
+					onSubmit={(...args) => {
+						console.log(args);
+					}}
+				>
+					<FormButtonGroup>
+						<Submit>提交</Submit>​ <Reset>重置</Reset>​
+					</FormButtonGroup>
+				</SchemaForm>
 			</Modal>
 		</div>
 	);

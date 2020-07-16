@@ -10,6 +10,7 @@ export const schema: ISchema = {
 			"x-component-props": {
 				placeholder: "input",
 			},
+			type: "string",
 		},
 		// import { Select } from '@formily/antd-components'
 		select: {
