@@ -1,7 +1,14 @@
 /** @format */
 
 import React, { useContext } from 'react'
-import { SchemaForm, FormButtonGroup, Submit } from '@formily/antd'
+import {
+	SchemaForm,
+	FormButtonGroup,
+	Submit,
+	LifeCycleTypes,
+	FormProvider,
+	FormSpy
+} from '@formily/antd'
 import {
 	Input,
 	Select,
@@ -85,6 +92,17 @@ export const PropertiesEdit = () => {
 				<FormButtonGroup>
 					<Submit>提交</Submit>
 				</FormButtonGroup>
+				<FormSpy
+					selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
+					reducer={(state, action, form) => {
+						setList(action.payload.values)
+						return state
+					}}
+				>
+					{({ form: spyForm, state }) => {
+						return <div></div>
+					}}
+				</FormSpy>
 			</SchemaForm>
 		</div>
 	)

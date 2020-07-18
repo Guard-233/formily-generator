@@ -20,7 +20,8 @@ import {
 	Radio,
 	Rating,
 	Transfer,
-	FormCard
+	FormCard,
+	FormMegaLayout
 } from '@formily/antd-components'
 import { Card, Form } from 'antd'
 import { cloneDeep } from 'lodash'
@@ -54,7 +55,8 @@ const BuiltInComponents = {
 
 // 布局组件
 const LayoutComponents = {
-	FormCard
+	FormCard,
+	FormMegaLayout
 }
 
 /**
@@ -134,7 +136,16 @@ export const Nested = (props: INestedProps) => {
 					}}
 					schema={{
 						type: 'object',
-						properties: { [item.id]: DraggableToFormily([item]) }
+						properties: {
+							NO_NAME: {
+								'x-component': 'mega-layout',
+								'x-component-props': {
+									labelAlign: 'top',
+									full: true
+								},
+								properties: { [item.id]: DraggableToFormily([item]) }
+							}
+						}
 					}}
 				></SchemaForm>
 			</React.Fragment>
