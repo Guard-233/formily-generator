@@ -1,54 +1,41 @@
-import React, { useState } from "react";
-import { BaseComponent } from "./baseComponent";
-import { Container } from "./container";
-import { PropertiesEdit } from "./propertiesEdit";
-import { ActiveItem } from "./context/activeItem";
-import { ContainerState } from "./context/container-state";
-import { IDraggableList } from "../draggable/draggable";
+/** @format */
+
+import React, { useState } from 'react'
+import { BaseComponent } from './baseComponent'
+import { Container } from './container'
+import { PropertiesEdit } from './propertiesEdit'
+import { ActiveItem } from './context'
+import { IDraggableList } from '../draggable/draggable.d'
 
 export const Core = () => {
-	const [active, setActive] = useState({
-		parent: [],
-		index: 0,
-		item: {
-			id: "schema",
-		},
-	});
-
-	const [containerStateValue, setContianerStateValue] = useState<
-		IDraggableList[]
-	>([
-		{
-			type: "object",
-			id: "object1",
-			title: "test",
+	const [active, setActive] = useState<{
+		list: IDraggableList
+		setList(IDraggableList: IDraggableList): void
+	}>({
+		list: {
+			id: 'schema',
 			properties: [],
+			type: 'object'
 		},
-	]);
+		setList: (list: IDraggableList) => {}
+	})
 
 	return (
 		<div
 			style={{
-				display: "flex",
+				display: 'flex'
 			}}
 		>
 			<ActiveItem.Provider
 				value={{
 					active: active,
-					changeActive: setActive,
+					changeActive: setActive
 				}}
 			>
-				<ContainerState.Provider
-					value={{
-						containerStateValue,
-						setContianerStateValue,
-					}}
-				>
-					<BaseComponent></BaseComponent>
-					<Container></Container>
-					<PropertiesEdit></PropertiesEdit>
-				</ContainerState.Provider>
+				<BaseComponent></BaseComponent>
+				<Container></Container>
+				<PropertiesEdit></PropertiesEdit>
 			</ActiveItem.Provider>
 		</div>
-	);
-};
+	)
+}

@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-	SchemaForm,
-	ISchema,
-	FormButtonGroup,
-	Submit,
-	Reset,
-	LifeCycleTypes,
-	createFormActions,
-} from "@formily/antd";
+/** @format */
+
+import React, { useContext } from 'react'
+import { SchemaForm, FormButtonGroup, Submit } from '@formily/antd'
 import {
 	Input,
 	Select,
@@ -25,12 +19,10 @@ import {
 	FormCard,
 	ArrayTable,
 	ArrayCards,
-	FormMegaLayout,
-} from "@formily/antd-components";
-import { schema } from "./schema";
-import { ActiveItem } from "../context/activeItem";
-import { ContainerState } from "../context/container-state";
-import { IDraggableList } from "../../draggable/draggable";
+	FormMegaLayout
+} from '@formily/antd-components'
+import { schema } from './schema'
+import { ActiveItem } from '../context'
 
 const BuiltInComponents = {
 	Input,
@@ -52,75 +44,48 @@ const BuiltInComponents = {
 	Radio,
 	RadioGroup: Radio.Group,
 	Rating,
-	Transfer,
-};
+	Transfer
+}
 
 const LayoutComponents = {
 	FormCard,
-	FormMegaLayout,
-};
+	FormMegaLayout
+}
 
 const ArrayComponents = {
 	ArrayTable,
-	ArrayCards,
-};
+	ArrayCards
+}
 
 export const PropertiesEdit = () => {
-	const [test, setTest] = useState<any>({});
+	const { active } = useContext(ActiveItem)
+
+	const { list, setList } = active
 
 	return (
 		<div
 			style={{
-				width: "30%",
-				height: "600px",
-				overflow: "auto",
+				width: '30%',
+				height: '600px',
+				overflow: 'auto'
 			}}
 		>
-			<ActiveItem.Consumer>
-				{({ active }) => {
-					// console.log(active);
-					return (
-						<ContainerState.Consumer>
-							{({ containerStateValue, setContianerStateValue }) => {
-								return (
-									<SchemaForm
-										onSubmit={(value) => {
-											let v = containerStateValue.map((pro, index) => {
-												if (index === 0) {
-													return {
-														...pro,
-														properties: pro.properties?.map((item) => {
-															if (item.id === active.item.id) {
-																return value;
-															}
-															return item;
-														}),
-													};
-												}
-												return pro;
-											});
-											console.log(v);
-
-											setContianerStateValue(v);
-										}}
-										value={active.item}
-										components={{
-											...BuiltInComponents,
-											...LayoutComponents,
-											...ArrayComponents,
-										}}
-										schema={schema}
-									>
-										<FormButtonGroup>
-											<Submit>提交</Submit>
-										</FormButtonGroup>
-									</SchemaForm>
-								);
-							}}
-						</ContainerState.Consumer>
-					);
+			<SchemaForm
+				onSubmit={(value) => {
+					setList(value)
 				}}
-			</ActiveItem.Consumer>
+				value={list}
+				components={{
+					...BuiltInComponents,
+					...LayoutComponents,
+					...ArrayComponents
+				}}
+				schema={schema}
+			>
+				<FormButtonGroup>
+					<Submit>提交</Submit>
+				</FormButtonGroup>
+			</SchemaForm>
 		</div>
-	);
-};
+	)
+}

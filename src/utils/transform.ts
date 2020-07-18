@@ -1,86 +1,103 @@
-import { IDraggableList } from "../components/draggable/draggable";
-import { ISchema } from "@formily/antd";
+/** @format */
 
+import { cloneDeep } from 'lodash'
+import { IDraggableList } from '../components/draggable/draggable'
+import { ISchema } from '@formily/antd'
+
+/**
+ * 将 Draggable(ReactSortable) 的数据格式转换为 formily 所需的数据格式
+ * @param list 传入 IDrIDraggableList[] 格式的数据
+ */
 export const DraggableToFormily = (list: IDraggableList[]): ISchema => {
-	const Schema = list.reduce((pre, now) => {
-		const DeepPropertise = Object.create(null);
+	const arrayToObject = (
+		properties: IDraggableList[]
+	): {
+		[key: string]: ISchema
+	} => {
+		return properties.reduce((propertiesPre, PropertiesNow) => {
+			return {
+				...propertiesPre,
+				[PropertiesNow.id]: DraggableToFormily([PropertiesNow])
+			}
+		}, {})
+	}
 
-		Object.assign(DeepPropertise, now);
+	const Schema = list.reduce((pre, now) => {
+		const DeepPropertise: ISchema = Object.create(null)
+
+		Object.assign(DeepPropertise, now)
 
 		if (now.properties) {
-			DeepPropertise.properties = DraggableToFormily(now.properties);
+			DeepPropertise.properties = arrayToObject(now.properties)
 		}
 
 		if (now.patternProperties) {
-			DeepPropertise.patternProperties = DraggableToFormily(
-				now.patternProperties
-			);
+			DeepPropertise.patternProperties = arrayToObject(now.patternProperties)
 		}
 
 		if (now.items) {
 			if (!Array.isArray(now.items)) {
-				now.items = [now.items];
+				now.items = [now.items]
 			}
-			DeepPropertise.items = now.items.map(
-				(item) => (DraggableToFormily([item]) as any).schema
-			);
+			DeepPropertise.items = now.items.map((item) => DraggableToFormily([item]))
 		}
 
-		delete DeepPropertise.id;
+		delete (DeepPropertise as { id: string }).id
 
 		return {
 			...pre,
-			[now.id]: DeepPropertise,
-		};
-	}, {});
+			...DeepPropertise
+		}
+	}, {})
 
-	return Schema;
-};
+	return Schema
+}
 
-export const IsISchema = (data: any): data is ISchema => {
-	return typeof data === "object" && data.properties;
-};
+/**
+ * 将 formily 的数据格式转换为 Draggable(ReactSortable) 所需的数据格式
+ * @param vSchema 传入 ISchema 格式的数据
+ * @param key 可控制ISchema数据格式的第一个对象转换为 Draggable(ReactSortable) 格式时的id名
+ */
+export const FormilyToDraggable = (vSchema: ISchema, key?: string): IDraggableList[] => {
+	const schema = {
+		[key || 'schema']: cloneDeep(vSchema)
+	}
+	const keys = Object.keys(schema)
 
-export const FormilyToDraggable = (
-	schema: ISchema | { [key: string]: ISchema }
-): IDraggableList[] => {
-	if (IsISchema(schema)) {
-		schema = {
-			schema,
-		};
+	const ObjectToArray = (properties: { [key: string]: ISchema }) => {
+		return Object.keys(properties).map((propertiesKey) => {
+			return FormilyToDraggable(properties[propertiesKey], propertiesKey)[0]
+		})
 	}
 
-	const keys = Object.keys(schema || {});
-
-	const result = keys.reduce((pre: any, nowKey: string) => {
-		const value = schema[nowKey];
+	const result = keys.reduce((pre: Array<IDraggableList>, nowKey: string) => {
+		const value: any = schema[nowKey]
 
 		if (value.properties) {
-			value.properties = FormilyToDraggable(value.properties);
+			value.properties = ObjectToArray(value.properties)
 		}
 
 		if (value.patternProperties) {
-			value.patternProperties = FormilyToDraggable(value.patternProperties);
+			value.patternProperties = ObjectToArray(value.patternProperties)
 		}
 
 		if (value.items) {
-			if (typeof value.items === "object" && !Array.isArray(value.items)) {
-				value.items = [value.items];
+			if (typeof value.items === 'object' && !Array.isArray(value.items)) {
+				value.items = [value.items]
 			}
 			value.items = value.items.map(
-				(item: ISchema | { [key: string]: ISchema }) =>
-					FormilyToDraggable(item)[0]
-			);
+				(item: ISchema | { [key: string]: ISchema }) => FormilyToDraggable(item)[0]
+			)
 		}
 
 		return [
 			...pre,
 			{
 				id: nowKey,
-				...value,
-			},
-		];
-	}, []);
+				...value
+			}
+		]
+	}, [])
 
-	return (result as unknown) as IDraggableList[];
-};
+	return result
+}

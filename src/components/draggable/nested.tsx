@@ -1,9 +1,11 @@
-import React from "react";
-import { ReactSortable } from "react-sortablejs";
-import { INestedProps, SetList, IDraggableList } from "./draggable";
-import { SchemaForm, ISchema, SchemaMarkupField as Field } from "@formily/antd";
-import { DraggableToFormily } from "../../utils/transform";
-import { merge } from "lodash";
+/** @format */
+
+import React, { useContext } from 'react'
+import { ReactSortable } from 'react-sortablejs'
+import { INestedProps, IDraggableList } from './draggable'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd'
+import { DraggableToFormily } from '../../utils/transform'
+import { merge } from 'lodash'
 import {
 	Input,
 	Select,
@@ -18,169 +20,206 @@ import {
 	Radio,
 	Rating,
 	Transfer,
-	FormCard,
-} from "@formily/antd-components";
-import { Card, Form } from "antd";
-import { cloneDeep } from "lodash";
-import { ActiveItem } from "../core/context/activeItem";
-import "antd/dist/antd.css";
-import "./nested.scss";
-import { active } from "sortablejs";
+	FormCard
+} from '@formily/antd-components'
+import { Card, Form } from 'antd'
+import { cloneDeep } from 'lodash'
+import { ActiveItem } from '../core/context'
+import 'antd/dist/antd.css'
+import './nested.scss'
 
-export const Nested = (props: INestedProps | any) => {
-	if ((props as { value: INestedProps }).value) {
-		props = (props as { value: INestedProps }).value;
+// 内置的非布局组件
+const BuiltInComponents = {
+	Input,
+	Select,
+	TextArea: Input.TextArea,
+	Password,
+	NumberPicker,
+	Switch,
+	DatePicker,
+	RangePicker: DatePicker.RangePicker,
+	WeekPicker: DatePicker.WeekPicker,
+	MonthPicker: DatePicker.MonthPicker,
+	YearPicker: DatePicker.YearPicker,
+	TimePicker,
+	Range,
+	Upload,
+	Checkbox,
+	CheckboxGroup: Checkbox.Group,
+	Radio,
+	RadioGroup: Radio.Group,
+	Rating,
+	Transfer
+}
+
+// 布局组件
+const LayoutComponents = {
+	FormCard
+}
+
+/**
+ * 合并后的组件
+ * @todo 是否可以考虑进行动态引入
+ */
+const margeComponents = {
+	...BuiltInComponents,
+	...LayoutComponents
+}
+
+/**
+ * 项目核心函数式组件，用于递归渲染
+ * @param props
+ */
+export const Nested = (props: INestedProps) => {
+	const { list, setList } = props
+
+	if (list === undefined) {
+		debugger
 	}
 
-	const setList = (item: IDraggableList) => {
-		const fun: SetList = (newState, sortable, store) => {
-			props.setList(
-				props.list.map((t: { id: React.ReactText; type: string }) => {
+	/**
+	 * 重写setList,使其对于递归组件也有效果
+	 * @param item
+	 */
+	const nestedSetList = (item: IDraggableList) => {
+		return (newState: IDraggableList | IDraggableList[]) => {
+			setList(
+				list.map((t) => {
 					if (t.id === item.id) {
-						if (t.type === "object") {
+						if (t.type === 'object') {
 							return {
 								...item,
 								id: item.id,
-								properties: cloneDeep(newState),
-							};
+								properties: cloneDeep(newState) as IDraggableList[]
+							}
+						} else if (item.type === 'array') {
+							return {
+								...item,
+								id: item.id,
+								items: cloneDeep(newState) as IDraggableList[]
+							}
 						} else {
-							return {
-								...item,
-								id: item.id,
-								items: cloneDeep(newState),
-							};
+							return newState as IDraggableList
 						}
 					}
-					return t;
+					return t
 				}),
-				sortable,
-				store
-			);
-		};
-		return fun;
-	};
+				null,
+				{
+					dragging: null
+				}
+			)
+		}
+	}
 
-	const BuiltInComponents = {
-		Input,
-		Select,
-		TextArea: Input.TextArea,
-		Password,
-		NumberPicker,
-		Switch,
-		DatePicker,
-		RangePicker: DatePicker.RangePicker,
-		WeekPicker: DatePicker.WeekPicker,
-		MonthPicker: DatePicker.MonthPicker,
-		YearPicker: DatePicker.YearPicker,
-		TimePicker,
-		Range,
-		Upload,
-		Checkbox,
-		CheckboxGroup: Checkbox.Group,
-		Radio,
-		RadioGroup: Radio.Group,
-		Rating,
-		Transfer,
-	};
+	const { changeActive } = useContext(ActiveItem)
 
-	const LayoutComponents = {
-		FormCard,
-	};
+	/**
+	 * 目前的默认渲染机制
+	 * @param item
+	 */
+	const DefaultRender = (item: IDraggableList) => {
+		return (
+			<React.Fragment key={item.id}>
+				<SchemaForm
+					components={margeComponents}
+					formComponent={'div'}
+					onClick={() => {
+						changeActive({
+							list: item,
+							setList: (newState) => {
+								nestedSetList(item)(newState)
+							}
+						})
+					}}
+					schema={{
+						type: 'object',
+						properties: { [item.id]: DraggableToFormily([item]) }
+					}}
+				></SchemaForm>
+			</React.Fragment>
+		)
+	}
 
-	const margeComponents = {
-		...BuiltInComponents,
-		...LayoutComponents,
-	};
+	/**
+	 * 对于对象的渲染机制
+	 * @param item
+	 * @todo 目前样式上之对于Cards有效
+	 */
+	const ObjectRender = (item: IDraggableList) => {
+		return (
+			<React.Fragment key={item.id}>
+				<Form component={'div'}>
+					<Card title={item.title}>
+						<Nested
+							{...props}
+							list={item.properties || []}
+							setList={nestedSetList(item)}
+						></Nested>
+					</Card>
+				</Form>
+			</React.Fragment>
+		)
+	}
+
+	/**
+	 * 对于数组的渲染机制
+	 * @param item
+	 * @todo 暂未完善
+	 */
+	const ArrayRender = (item: IDraggableList) => {
+		return (
+			<SchemaForm
+				component={'div'}
+				components={{ ...margeComponents, Nested }}
+				key={item.id}
+			>
+				<FormCard title="block">
+					<Field
+						x-component="Nested"
+						default={{
+							...props,
+							group: {
+								name: 'g1',
+								put: ['g2', 'g1']
+							},
+							list: cloneDeep(item.properties) || [],
+							setList: nestedSetList(cloneDeep(item))
+						}}
+					/>
+				</FormCard>
+			</SchemaForm>
+		)
+	}
 
 	return (
-		<div>
-			<ActiveItem.Consumer>
-				{({ active, changeActive }) => {
-					return (
-						<ReactSortable
-							{...merge(
-								{
-									group: {
-										name: "g1",
-									},
-								},
-								props
-							)}
-							list={props.list}
-							setList={props.setList}
-							style={{
-								minHeight: "100px",
-							}}
-						>
-							{props.list.map((item: IDraggableList, index: number) => {
-								if (item.type === "object" || item.type === "array") {
-									switch (item["x-component"]?.toLocaleLowerCase()) {
-										// case "card":
-										// 	return (
-										// 		<SchemaForm
-										// 			component={"div"}
-										// 			components={{ ...margeComponents, Nested }}
-										// 			key={item.id}
-										// 		>
-										// 			<FormCard title="block">
-										// 				<Field
-										// 					x-component="Nested"
-										// 					default={{
-										// 						...props,
-										// 						group: {
-										// 							name: "g1",
-										// 							put: ["g2", "g1"],
-										// 						},
-										// 						list: cloneDeep(item.properties) || [],
-										// 						setList: setList(cloneDeep(item)),
-										// 					}}
-										// 				/>
-										// 			</FormCard>
-										// 		</SchemaForm>
-										// 	);
-										default:
-											return (
-												<React.Fragment key={item.id}>
-													<Form component={"div"}>
-														<Card title={item.title}>
-															<Nested
-																{...props}
-																list={item.properties || []}
-																setList={setList(item)}
-															></Nested>
-														</Card>
-													</Form>
-												</React.Fragment>
-											);
-									}
-								} else {
-									return (
-										<React.Fragment key={item.id}>
-											<SchemaForm
-												components={margeComponents}
-												formComponent={"div"}
-												onClick={() => {
-													changeActive({
-														parent: (props as INestedProps).list,
-														index,
-														item,
-													});
-												}}
-												schema={{
-													type: "object",
-													properties: DraggableToFormily([item]) as {
-														[key: string]: ISchema;
-													},
-												}}
-											></SchemaForm>
-										</React.Fragment>
-									);
-								}
-							})}
-						</ReactSortable>
-					);
-				}}
-			</ActiveItem.Consumer>
-		</div>
-	);
-};
+		<ReactSortable
+			{...merge(
+				{
+					group: {
+						name: 'g1'
+					}
+				},
+				props
+			)}
+			list={list}
+			setList={setList}
+			style={{
+				minHeight: '100px'
+			}}
+		>
+			{list.map((item: IDraggableList, index: number) => {
+				switch (item.type) {
+					case 'object':
+						return ObjectRender(item)
+					case 'array':
+						return ObjectRender(item)
+
+					// return ArrayRender(item)
+					default:
+						return DefaultRender(item)
+				}
+			})}
+		</ReactSortable>
+	)
+}

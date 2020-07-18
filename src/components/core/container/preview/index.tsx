@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import {
-	SchemaForm,
-	ISchema,
-	FormButtonGroup,
-	Submit,
-	Reset,
-} from "@formily/antd";
-import { Modal, Button } from "antd";
+/** @format */
+
+import React, { useState } from 'react'
+import { SchemaForm, ISchema, FormButtonGroup, Submit, Reset } from '@formily/antd'
+import { Modal, Button } from 'antd'
 import {
 	Input,
 	Select,
@@ -23,8 +19,8 @@ import {
 	Transfer,
 	FormCard,
 	ArrayTable,
-	ArrayCards,
-} from "@formily/antd-components";
+	ArrayCards
+} from '@formily/antd-components'
 
 const BuiltInComponents = {
 	Input,
@@ -46,34 +42,34 @@ const BuiltInComponents = {
 	Radio,
 	RadioGroup: Radio.Group,
 	Rating,
-	Transfer,
-};
+	Transfer
+}
 
 const LayoutComponents = {
-	FormCard,
-};
+	FormCard
+}
 
 const ArrayComponents = {
 	ArrayTable,
-	ArrayCards,
-};
+	ArrayCards
+}
 
 export const Preview = (props: ISchema) => {
 	const [state, setState] = useState({
-		visible: false,
-	});
+		visible: false
+	})
 
 	const handleOk = (e: any) => {
 		setState({
-			visible: false,
-		});
-	};
+			visible: false
+		})
+	}
 
 	const handleCancel = (e: any) => {
 		setState({
-			visible: false,
-		});
-	};
+			visible: false
+		})
+	}
 
 	return (
 		<div>
@@ -81,7 +77,7 @@ export const Preview = (props: ISchema) => {
 				type="primary"
 				onClick={() =>
 					setState({
-						visible: true,
+						visible: true
 					})
 				}
 			>
@@ -92,22 +88,22 @@ export const Preview = (props: ISchema) => {
 				visible={state.visible}
 				onOk={handleOk}
 				onCancel={handleCancel}
-				width={"80%"}
+				width={'80%'}
 				centered={true}
 				bodyStyle={{
-					maxHeight: "600px",
-					overflow: "auto",
+					maxHeight: '600px',
+					overflow: 'auto'
 				}}
 			>
 				<SchemaForm
 					components={{
 						...BuiltInComponents,
 						...LayoutComponents,
-						...ArrayComponents,
+						...ArrayComponents
 					}}
 					schema={props}
 					onSubmit={(...args) => {
-						console.log(args);
+						console.log(args)
 					}}
 				>
 					<FormButtonGroup>
@@ -116,5 +112,5 @@ export const Preview = (props: ISchema) => {
 				</SchemaForm>
 			</Modal>
 		</div>
-	);
-};
+	)
+}
