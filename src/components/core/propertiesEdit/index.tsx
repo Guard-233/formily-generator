@@ -30,6 +30,7 @@ import {
 } from '@formily/antd-components'
 import { schema } from './schema'
 import { ActiveItem } from '../context'
+import { CustomMonacoEditor } from '../../customComponent/costom-monaco-editor'
 
 const BuiltInComponents = {
 	Input,
@@ -86,7 +87,8 @@ export const PropertiesEdit = () => {
 				components={{
 					...BuiltInComponents,
 					...LayoutComponents,
-					...ArrayComponents
+					...ArrayComponents,
+					CustomMonacoEditor
 				}}
 				schema={schema}
 			>

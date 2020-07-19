@@ -42,7 +42,7 @@ export const schema: ISchema = {
 									description: '字段类型'
 								},
 								default: {
-									'x-component': 'Input',
+									'x-component': 'CustomMonacoEditor',
 									type: 'string',
 									title: 'default',
 									description: '字段默认值'
@@ -80,55 +80,80 @@ export const schema: ISchema = {
 									title: 'description',
 									description: '字段描述'
 								},
-								readOnly: {
-									type: 'boolean',
-									'x-component': 'RadioGroup',
-									title: 'readOnly',
-									enum: [
-										{
-											label: 'true',
-											value: true
-										},
-										{
-											label: 'false',
-											value: false
-										}
-									],
-									description: '是否只读与 editable 一致'
-								},
-								writeOnly: {
-									type: 'boolean',
-									'x-component': 'RadioGroup',
-									title: 'writeOnly',
-									enum: [
-										{
-											label: 'true',
-											value: true
-										},
-										{
-											label: 'false',
-											value: false
-										}
-									]
-								},
-								enum: {
-									type: 'array',
-									'x-component': 'arraytable',
-									title: 'enum',
-									items: {
-										type: 'object',
-										properties: {
-											label: {
-												title: 'label',
-												'x-component': 'input'
-											},
-											value: {
-												title: 'value',
-												'x-component': 'input'
-											}
-										}
+								READONLY_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 16,
+										full: false,
+										labelAlign: 'left'
 									},
-									description: '某些组件的枚举值'
+									properties: {
+										readOnly: {
+											type: 'boolean',
+											'x-component': 'Switch',
+											title: 'readOnly',
+											description: '是否只读与 editable 一致'
+										},
+										// writeOnly: {
+										// 	type: 'boolean',
+										// 	'x-component': 'Switch',
+										// 	title: 'writeOnly'
+										// },
+										// editable	字段是否可编辑	boolean
+										editable: {
+											type: 'boolean',
+											title: 'editable',
+											description: '字段是否可编辑',
+											'x-component': 'Switch'
+										},
+										// visible	字段是否可见(数据+样式)	boolean
+										visible: {
+											type: 'boolean',
+											title: 'visible',
+											description: '字段是否可见(数据+样式)',
+											'x-component': 'Switch'
+										},
+										// display	字段样式是否可见	boolean
+										display: {
+											type: 'boolean',
+											title: 'display',
+											description: '字段样式是否可见',
+											'x-component': 'Switch'
+										}
+									}
+								},
+								ENUM_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										enum: {
+											type: 'array',
+											'x-component': 'arraytable',
+											title: 'enum',
+											items: {
+												type: 'object',
+												properties: {
+													label: {
+														title: 'label',
+														'x-component': 'input',
+														default: ''
+													},
+													value: {
+														title: 'value',
+														'x-component': 'input',
+														default: ''
+													}
+												}
+											},
+											description: '某些组件的枚举值'
+										}
+									}
 								},
 								// maxItems	最大条目数	number
 								maxItems: {
@@ -157,57 +182,6 @@ export const schema: ISchema = {
 									type: 'number',
 									title: 'minProperties',
 									description: '最小属性数量'
-								},
-								// editable	字段是否可编辑	boolean
-								editable: {
-									type: 'boolean',
-									title: 'editable',
-									description: '字段是否可编辑',
-									'x-component': 'RadioGroup',
-									enum: [
-										{
-											label: 'true',
-											value: true
-										},
-										{
-											label: 'false',
-											value: false
-										}
-									]
-								},
-								// visible	字段是否可见(数据+样式)	boolean
-								visible: {
-									type: 'boolean',
-									title: 'visible',
-									description: '字段是否可见(数据+样式)',
-									'x-component': 'RadioGroup',
-									enum: [
-										{
-											label: 'true',
-											value: true
-										},
-										{
-											label: 'false',
-											value: false
-										}
-									]
-								},
-								// display	字段样式是否可见	boolean
-								display: {
-									type: 'boolean',
-									title: 'display',
-									description: '字段样式是否可见',
-									'x-component': 'RadioGroup',
-									enum: [
-										{
-											label: 'true',
-											value: true
-										},
-										{
-											label: 'false',
-											value: false
-										}
-									]
 								}
 							}
 						}
@@ -231,8 +205,7 @@ export const schema: ISchema = {
 							},
 							properties: {
 								const: {
-									'x-component': 'Input',
-									type: 'string',
+									'x-component': 'CustomMonacoEditor',
 									title: 'const',
 									description: '校验字段值是否与 const 的值相等'
 								},
@@ -328,7 +301,7 @@ export const schema: ISchema = {
 								},
 								// format	正则规则类型，详细类型可以往后看	InternalFormats ！！！
 								format: {
-									'x-component': 'Input',
+									'x-component': 'CustomMonacoEditor',
 									type: 'string',
 									title: 'format',
 									description: '正则规则类型，详细类型可以往后看'

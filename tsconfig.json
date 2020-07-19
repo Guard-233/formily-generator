@@ -14,7 +14,8 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react",
-		"suppressImplicitAnyIndexErrors": true
+		"suppressImplicitAnyIndexErrors": true,
+		"downlevelIteration": true
 	},
 	"include": ["src", "src/utils"]
 }
