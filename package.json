@@ -17,7 +17,9 @@
 		"lodash": "^4.17.19",
 		"node-sass": "^4.14.1",
 		"react": "^16.13.1",
+		"react-app-rewired": "^2.1.6",
 		"react-dom": "^16.13.1",
+		"react-monaco-editor": "^0.39.1",
 		"react-scripts": "3.4.1",
 		"react-sortablejs": "^2.0.11",
 		"styled-components": "^5.1.1",
@@ -25,9 +27,9 @@
 		"utility-types": "^3.10.0"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"start": "react-app-rewired start",
+		"build": "react-app-rewired build",
+		"test": "react-scripts test --env=jsdom",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {
@@ -47,6 +49,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.157",
-		"@types/sortablejs": "^1.10.4"
+		"@types/sortablejs": "^1.10.4",
+		"monaco-editor-webpack-plugin": "^1.9.0"
 	}
 }

@@ -23,7 +23,10 @@ export interface IDraggableList extends ExcluedISchema {
 	additionalProperties?: IDraggableList
 }
 
-export interface IReactDraggableProps
-	extends ReactSortableProps<IDraggableList> {}
+export interface IReactDraggableProps extends ReactSortableProps<IDraggableList> {
+	allowActive?: boolean
+}
 
-export interface INestedProps extends ReactSortableProps<IDraggableList> {}
+export interface INestedProps extends ReactSortableProps<IDraggableList> {
+	allowActive?: boolean
+}

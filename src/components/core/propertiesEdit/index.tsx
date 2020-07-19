@@ -74,7 +74,8 @@ export const PropertiesEdit = () => {
 			style={{
 				width: '30%',
 				height: '600px',
-				overflow: 'auto'
+				overflow: 'auto',
+				padding: '15px'
 			}}
 		>
 			<SchemaForm
@@ -89,13 +90,15 @@ export const PropertiesEdit = () => {
 				}}
 				schema={schema}
 			>
-				<FormButtonGroup>
+				{/* <FormButtonGroup>
 					<Submit>提交</Submit>
-				</FormButtonGroup>
+				</FormButtonGroup> */}
 				<FormSpy
 					selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
 					reducer={(state, action, form) => {
-						setList(action.payload.values)
+						if (list.id === action.payload.values.id) {
+							setList(action.payload.values)
+						}
 						return state
 					}}
 				>

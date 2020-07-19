@@ -127,12 +127,14 @@ export const Nested = (props: INestedProps) => {
 					components={margeComponents}
 					formComponent={'div'}
 					onClick={() => {
-						changeActive({
-							list: item,
-							setList: (newState) => {
-								nestedSetList(item)(newState)
-							}
-						})
+						if (props.allowActive) {
+							changeActive({
+								list: item,
+								setList: (newState) => {
+									nestedSetList(item)(newState)
+								}
+							})
+						}
 					}}
 					schema={{
 						type: 'object',
