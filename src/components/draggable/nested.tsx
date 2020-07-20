@@ -3,7 +3,11 @@
 import React, { useContext } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import { INestedProps, IDraggableList } from './draggable'
-import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd'
+import {
+	SchemaForm,
+	SchemaMarkupField as Field,
+	registerFormItemComponent
+} from '@formily/antd'
 import { DraggableToFormily } from '../../utils/transform'
 import { merge } from 'lodash'
 import {
@@ -74,10 +78,6 @@ const margeComponents = {
  */
 export const Nested = (props: INestedProps) => {
 	const { list, setList } = props
-
-	if (list === undefined) {
-		debugger
-	}
 
 	/**
 	 * 重写setList,使其对于递归组件也有效果

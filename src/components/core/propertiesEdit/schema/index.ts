@@ -339,10 +339,26 @@ export const schema: ISchema = {
 								},
 								// format	正则规则类型，详细类型可以往后看	InternalFormats ！！！
 								format: {
-									'x-component': 'CustomMonacoEditor',
-									type: 'string',
+									'x-component': 'Select',
+									'x-component-props': {
+										mode: 'tags'
+									},
 									title: 'format',
-									description: '正则规则类型，详细类型可以往后看'
+									description: '正则规则类型',
+									enum: [
+										'url',
+										'email',
+										'ipv6',
+										'ipv4',
+										'idcard',
+										'taodomain',
+										'qq',
+										'phone',
+										'money',
+										'zh',
+										'date',
+										'zip'
+									]
 								},
 								// triggerType	字段校验时机	"onChange" | "onBlur"
 								triggerType: {
@@ -385,33 +401,6 @@ export const schema: ISchema = {
 									type: 'string',
 									title: 'x-component'
 								},
-								// x-component-props	字段 UI 组件属性	{}
-								'x-component-props': {
-									type: 'object',
-									properties: {
-										NO_NAME: {
-											'x-component': 'card',
-											'x-component-props': {
-												title: 'x-component-props'
-											},
-											type: 'object',
-											properties: {
-												placeholder: {
-													'x-component': 'Input',
-													type: 'string',
-													title: 'placeholder'
-												}
-											}
-										}
-									}
-								},
-								// x-props	字段扩展属性	{ [name: string]: any } ！！！
-								'x-props': {
-									'x-component': 'Input',
-									type: 'string',
-									title: 'x-props',
-									description: '字段扩展属性'
-								},
 								// x-index	字段顺序	number
 								'x-index': {
 									'x-component': 'NumberPicker',
@@ -419,13 +408,59 @@ export const schema: ISchema = {
 									title: 'x-index',
 									description: '字段顺序'
 								},
-								// x-rules	字段校验规则，详细描述可以往后看	ValidatePatternRules
-								'x-rules': {
-									'x-component': 'Input',
-									type: 'string',
-									title: 'x-rules',
-									description: '字段校验规则，详细描述可以往后看'
+								// x-component-props	字段 UI 组件属性	{}
+								X_COMPONENT_PROPS_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										'x-component-props': {
+											'x-component': 'CustomMonacoEditor',
+											title: 'x-component-props',
+											description: '字段 UI 组件属性'
+										}
+									}
 								},
+								// x-props	字段扩展属性	{ [name: string]: any } ！！！
+								X_PROPS_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										'x-props': {
+											'x-component': 'CustomMonacoEditor',
+											type: 'string',
+											title: 'x-props',
+											description: '字段扩展属性'
+										}
+									}
+								},
+								// x-rules	字段校验规则，详细描述可以往后看	ValidatePatternRules
+								X_RULES_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										'x-rules': {
+											'x-component': 'CustomMonacoEditor',
+											title: 'x-rules',
+											description: '字段校验规则'
+										}
+									}
+								},
+								// x-linkages	字段间联动协议，详细描述可以往后看	Array<{ target: FormPathPattern, type: string, [key: string]: any }>
 								X_LINKAGES_NO_NAME: {
 									'x-component': 'mega-layout',
 									'x-component-props': {
@@ -443,14 +478,22 @@ export const schema: ISchema = {
 										}
 									}
 								},
-								// x-linkages	字段间联动协议，详细描述可以往后看	Array<{ target: FormPathPattern, type: string, [key: string]: any }>
-
-								// x-mega-props	字段布局属性	{ [name: string]: any }
-								'x-mega-props': {
-									'x-component': 'Input',
-									type: 'string',
-									title: 'x-mega-props',
-									description: '字段布局属性'
+								X_MEGA_PROPS_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										'x-mega-props': {
+											'x-component': 'CustomMonacoEditor',
+											type: 'string',
+											title: 'x-mega-props',
+											description: '字段布局属性'
+										}
+									}
 								}
 							}
 						}
