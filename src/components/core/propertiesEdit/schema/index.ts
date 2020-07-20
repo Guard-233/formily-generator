@@ -41,11 +41,22 @@ export const schema: ISchema = {
 									default: 'string',
 									description: '字段类型'
 								},
-								default: {
-									'x-component': 'CustomMonacoEditor',
-									type: 'string',
-									title: 'default',
-									description: '字段默认值'
+								DEFAULT_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										default: {
+											'x-component': 'CustomMonacoEditor',
+											type: 'string',
+											title: 'default',
+											description: '字段默认值'
+										}
+									}
 								}
 							}
 						}
@@ -132,26 +143,42 @@ export const schema: ISchema = {
 										labelAlign: 'top'
 									},
 									properties: {
-										enum: {
-											type: 'array',
-											'x-component': 'arraytable',
-											title: 'enum',
-											items: {
-												type: 'object',
-												properties: {
-													label: {
-														title: 'label',
-														'x-component': 'input',
-														default: ''
-													},
-													value: {
-														title: 'value',
-														'x-component': 'input',
-														default: ''
-													}
-												}
+										// enum: {
+										// 	type: 'array',
+										// 	'x-component': 'arraytable',
+										// 	title: 'enum',
+										// 	items: {
+										// 		type: 'object',
+										// 		properties: {
+										// 			label: {
+										// 				title: 'label',
+										// 				'x-component': 'input',
+										// 				default: ''
+										// 			},
+										// 			value: {
+										// 				title: 'value',
+										// 				'x-component': 'input',
+										// 				default: ''
+										// 			}
+										// 		}
+										// 	},
+										// 	description: '某些组件的枚举值'
+										// },
+										ENUM_NO_NAME: {
+											'x-component': 'mega-layout',
+											'x-component-props': {
+												labelCol: 8,
+												wrapperCol: 24,
+												full: true,
+												labelAlign: 'top'
 											},
-											description: '某些组件的枚举值'
+											properties: {
+												enum: {
+													'x-component': 'CustomMonacoEditor',
+													title: 'enum',
+													description: '某些组件的枚举值'
+												}
+											}
 										}
 									}
 								},
@@ -204,10 +231,21 @@ export const schema: ISchema = {
 								labelAlign: 'left'
 							},
 							properties: {
-								const: {
-									'x-component': 'CustomMonacoEditor',
-									title: 'const',
-									description: '校验字段值是否与 const 的值相等'
+								CONST_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										const: {
+											'x-component': 'CustomMonacoEditor',
+											title: 'const',
+											description: '校验字段值是否与 const 的值相等'
+										}
+									}
 								},
 								// validate
 								multipleOf: {
@@ -388,13 +426,25 @@ export const schema: ISchema = {
 									title: 'x-rules',
 									description: '字段校验规则，详细描述可以往后看'
 								},
-								// x-linkages	字段间联动协议，详细描述可以往后看	Array<{ target: FormPathPattern, type: string, [key: string]: any }>
-								'x-linkages': {
-									'x-component': 'Input',
-									type: 'string',
-									title: 'x-linkages',
-									description: '字段间联动协议，详细描述可以往后看'
+								X_LINKAGES_NO_NAME: {
+									'x-component': 'mega-layout',
+									'x-component-props': {
+										labelCol: 8,
+										wrapperCol: 24,
+										full: true,
+										labelAlign: 'top'
+									},
+									properties: {
+										'x-linkages': {
+											'x-component': 'CustomMonacoEditor',
+											type: 'string',
+											title: 'x-linkages',
+											description: '字段间联动协议，详细描述可以往后看'
+										}
+									}
 								},
+								// x-linkages	字段间联动协议，详细描述可以往后看	Array<{ target: FormPathPattern, type: string, [key: string]: any }>
+
 								// x-mega-props	字段布局属性	{ [name: string]: any }
 								'x-mega-props': {
 									'x-component': 'Input',
