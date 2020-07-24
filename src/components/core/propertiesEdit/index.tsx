@@ -74,7 +74,7 @@ export const PropertiesEdit = () => {
 		<div
 			style={{
 				width: '30%',
-				height: '600px',
+				height: '100%',
 				overflow: 'auto',
 				padding: '15px'
 			}}

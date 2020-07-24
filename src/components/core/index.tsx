@@ -23,7 +23,8 @@ export const Core = () => {
 	return (
 		<div
 			style={{
-				display: 'flex'
+				display: 'flex',
+				height: '100%'
 			}}
 		>
 			<ActiveItem.Provider

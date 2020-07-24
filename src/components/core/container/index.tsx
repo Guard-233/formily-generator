@@ -8,8 +8,40 @@ import { Preview } from './preview'
 import { EditSchema } from './editSchema'
 import { DraggableToFormily } from '../../../utils/transform'
 import { Layout } from 'antd'
+import { Ashcan } from './ashcan'
 
 const { Content, Header } = Layout
+
+class ErrorBoundary extends React.Component<
+	any,
+	{
+		hasError: boolean
+	}
+> {
+	constructor(props: Readonly<{}>) {
+		super(props)
+		this.state = { hasError: false }
+	}
+
+	static getDerivedStateFromError() {
+		// Update state so the next render will show the fallback UI.
+		return { hasError: true }
+	}
+
+	componentDidCatch(error: any, info: any) {
+		// You can also log the error to an error reporting service
+		// logErrorToMyService(error, info);
+	}
+
+	render() {
+		if (this.state.hasError) {
+			// You can render any custom fallback UI
+			return <h1>Something went wrong.</h1>
+		}
+
+		return this.props.children
+	}
+}
 
 export const Container = () => {
 	const [list, setList] = useState<Array<IDraggableList>>([
@@ -23,7 +55,9 @@ export const Container = () => {
 	return (
 		<Layout
 			style={{
-				width: '60%'
+				width: '60%',
+				height: '100%',
+				overflow: 'auto'
 			}}
 		>
 			<Header
@@ -36,20 +70,27 @@ export const Container = () => {
 				<EditSchema schema={DraggableToFormily(list)} setSchema={setList}></EditSchema>
 				<Preview {...DraggableToFormily(list)}></Preview>
 			</Header>
-			<Content>
-				<ReactDraggable
-					list={list}
-					setList={setList}
-					group={{
-						name: 'g1',
-						put: true
-					}}
-					allowActive={true}
-					clone={(item) => ({
-						...item,
-						id: item.id + GenNonDuplicateID()
-					})}
-				></ReactDraggable>
+			<Content
+				style={{
+					overflow: 'auto'
+				}}
+			>
+				<ErrorBoundary>
+					<ReactDraggable
+						list={list}
+						setList={setList}
+						group={{
+							name: 'g1',
+							put: true
+						}}
+						allowActive={true}
+						clone={(item) => ({
+							...item,
+							id: item.id + GenNonDuplicateID()
+						})}
+					></ReactDraggable>
+				</ErrorBoundary>
+				<Ashcan />
 			</Content>
 		</Layout>
 	)
