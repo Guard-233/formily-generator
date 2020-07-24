@@ -1,12 +1,13 @@
 /** @format */
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import { INestedProps, IDraggableList } from './draggable'
 import {
 	SchemaForm,
 	SchemaMarkupField as Field,
-	registerFormItemComponent
+	IMarkupSchemaFieldProps,
+	ISchemaFieldComponentProps
 } from '@formily/antd'
 import { DraggableToFormily } from '../../utils/transform'
 import { merge } from 'lodash'
@@ -25,13 +26,20 @@ import {
 	Rating,
 	Transfer,
 	FormCard,
-	FormMegaLayout
+	FormBlock,
+	FormMegaLayout,
+	FormTab,
+	ArrayCards,
+	ArrayTable
 } from '@formily/antd-components'
-import { Card, Form } from 'antd'
+import { Card, Form, Tabs, Table } from 'antd'
 import { cloneDeep } from 'lodash'
 import { ActiveItem } from '../core/context'
 import 'antd/dist/antd.css'
 import './nested.scss'
+
+const { TabPane } = Tabs
+const { Column } = Table
 
 // 内置的非布局组件
 const BuiltInComponents = {
@@ -60,7 +68,14 @@ const BuiltInComponents = {
 // 布局组件
 const LayoutComponents = {
 	FormCard,
-	FormMegaLayout
+	FormBlock,
+	FormMegaLayout,
+	FormTab
+}
+
+const ArrayComponent = {
+	ArrayCards,
+	ArrayTable
 }
 
 /**
@@ -69,14 +84,47 @@ const LayoutComponents = {
  */
 const margeComponents = {
 	...BuiltInComponents,
-	...LayoutComponents
+	...LayoutComponents,
+	...ArrayComponent
+}
+
+interface INested {
+	(props: INestedProps): JSX.Element
+	(props: { value: INestedProps }): JSX.Element
+}
+
+export const isInestedProps = (value: any): value is INestedProps => {
+	return !value.value
+}
+
+const NestedObject = (props: ISchemaFieldComponentProps) => {
+	const { list, setList } = props.value
+
+	return (
+		<Nested
+			{...({} as any)}
+			group={{
+				name: 'g1',
+				put: true
+			}}
+			list={list}
+			setList={setList}
+			allowActive={true}
+		></Nested>
+	)
 }
 
 /**
  * 项目核心函数式组件，用于递归渲染
  * @param props
  */
-export const Nested = (props: INestedProps) => {
+export const Nested: INested = (args: any) => {
+	let props: INestedProps = args
+
+	if (!isInestedProps(args)) {
+		props = args.value
+	}
+
 	const { list, setList } = props
 
 	/**
@@ -121,17 +169,25 @@ export const Nested = (props: INestedProps) => {
 	 * @param item
 	 */
 	const DefaultRender = (item: IDraggableList) => {
+		if (item.id === 'formCards' || item.id === 'schema') {
+			debugger
+		}
+
 		return (
 			<React.Fragment key={item.id}>
 				<SchemaForm
 					components={margeComponents}
 					formComponent={'div'}
-					onClick={() => {
+					onClick={(event) => {
+						event.stopPropagation()
+
 						if (props.allowActive) {
 							changeActive({
 								list: item,
 								setList: (newState) => {
-									nestedSetList(item)(newState)
+									if (!/\{\{ *\}\}/.test(JSON.stringify(newState))) {
+										nestedSetList(item)(newState)
+									}
 								}
 							})
 						}
@@ -160,19 +216,121 @@ export const Nested = (props: INestedProps) => {
 	 * @todo 目前样式上之对于Cards有效
 	 */
 	const ObjectRender = (item: IDraggableList) => {
-		return (
-			<React.Fragment key={item.id}>
-				<Form component={'div'}>
-					<Card title={item.title}>
-						<Nested
-							{...props}
-							list={item.properties || []}
-							setList={nestedSetList(item)}
-						></Nested>
-					</Card>
-				</Form>
-			</React.Fragment>
-		)
+		let ObjRenderCom: any = FormCard
+
+		switch (item['x-component']?.toLocaleLowerCase()) {
+			case 'block':
+				ObjRenderCom = FormBlock
+				break
+			case 'tab':
+				ObjRenderCom = Tabs
+				break
+			case 'tabpane':
+				ObjRenderCom = TabPane
+				break
+		}
+
+		switch (item['x-component']?.toLocaleLowerCase()) {
+			case 'block':
+				return (
+					<React.Fragment key={item.id}>
+						<SchemaForm
+							components={{ ...margeComponents, NestedObject }}
+							value={{
+								[item.id]: {
+									list: item.properties,
+									setList: nestedSetList(item)
+								}
+							}}
+							component="div"
+						>
+							<ObjRenderCom {...item['x-component-props']}>
+								<Field x-component={'NestedObject'} name={item.id as string} />
+							</ObjRenderCom>
+						</SchemaForm>
+					</React.Fragment>
+				)
+			case 'tab':
+				return (
+					<React.Fragment>
+						<Tabs {...item['x-component-props']}>
+							{item.properties?.map((tabp) => {
+								return (
+									<TabPane {...tabp['x-component-props']} key={tabp.id as string}>
+										<Nested
+											{...props}
+											list={tabp.properties || []}
+											setList={(newState: IDraggableList | IDraggableList[]) => {
+												setList(
+													list.map((i) => {
+														if (item.id === i.id) {
+															return {
+																...item,
+																properties: item.properties!.map((t) => {
+																	if (t.id === tabp.id) {
+																		return {
+																			...tabp,
+																			id: tabp.id,
+																			properties: cloneDeep(newState) as IDraggableList[]
+																		}
+																	}
+																	return t
+																})
+															}
+														}
+														return i
+													}),
+													null,
+													{ dragging: null }
+												)
+											}}
+										></Nested>
+									</TabPane>
+								)
+							})}
+						</Tabs>
+					</React.Fragment>
+				)
+			default:
+				return (
+					<React.Fragment key={item.id}>
+						<Form
+							component={'div'}
+							onClick={(event) => {
+								event.stopPropagation()
+
+								if (props.allowActive) {
+									changeActive({
+										list: item,
+										setList: (newState) => {
+											setList(
+												list.map((card) => {
+													if (card.id === newState.id) {
+														return newState
+													}
+													return card
+												}),
+												null,
+												{
+													dragging: null
+												}
+											)
+										}
+									})
+								}
+							}}
+						>
+							<Card {...item['x-component-props']}>
+								<Nested
+									{...props}
+									list={item.properties || []}
+									setList={nestedSetList(item)}
+								></Nested>
+							</Card>
+						</Form>
+					</React.Fragment>
+				)
+		}
 	}
 
 	/**
@@ -182,26 +340,13 @@ export const Nested = (props: INestedProps) => {
 	 */
 	const ArrayRender = (item: IDraggableList) => {
 		return (
-			<SchemaForm
-				component={'div'}
-				components={{ ...margeComponents, Nested }}
-				key={item.id}
-			>
-				<FormCard title="block">
-					<Field
-						x-component="Nested"
-						default={{
-							...props,
-							group: {
-								name: 'g1',
-								put: ['g2', 'g1']
-							},
-							list: cloneDeep(item.properties) || [],
-							setList: nestedSetList(cloneDeep(item))
-						}}
-					/>
-				</FormCard>
-			</SchemaForm>
+			<Card {...item['x-component-props']} title={item['x-component']}>
+				<Nested
+					{...props}
+					list={(item.items as IDraggableList[]) || []}
+					setList={nestedSetList(item)}
+				></Nested>
+			</Card>
 		)
 	}
 
@@ -226,9 +371,7 @@ export const Nested = (props: INestedProps) => {
 					case 'object':
 						return ObjectRender(item)
 					case 'array':
-						return ObjectRender(item)
-
-					// return ArrayRender(item)
+						return ArrayRender(item)
 					default:
 						return DefaultRender(item)
 				}
