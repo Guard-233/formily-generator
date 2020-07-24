@@ -3,6 +3,7 @@
 import { cloneDeep } from 'lodash'
 import { IDraggableList } from '../components/draggable/draggable'
 import { ISchema } from '@formily/antd'
+import { GenNonDuplicateID } from '../utils'
 
 /**
  * 将 Draggable(ReactSortable) 的数据格式转换为 formily 所需的数据格式
@@ -60,7 +61,7 @@ export const DraggableToFormily = (list: IDraggableList[]): ISchema => {
  */
 export const FormilyToDraggable = (vSchema: ISchema, key?: string): IDraggableList[] => {
 	const schema = {
-		[key || 'schema']: cloneDeep(vSchema)
+		[key || 'schema' + GenNonDuplicateID()]: cloneDeep(vSchema)
 	}
 	const keys = Object.keys(schema)
 
