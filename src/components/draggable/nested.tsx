@@ -1,12 +1,11 @@
 /** @format */
 
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import { INestedProps, IDraggableList } from './draggable'
 import {
 	SchemaForm,
 	SchemaMarkupField as Field,
-	IMarkupSchemaFieldProps,
 	ISchemaFieldComponentProps
 } from '@formily/antd'
 import { DraggableToFormily } from '../../utils/transform'
@@ -32,14 +31,13 @@ import {
 	ArrayCards,
 	ArrayTable
 } from '@formily/antd-components'
-import { Card, Form, Tabs, Table } from 'antd'
+import { Card, Form, Tabs } from 'antd'
 import { cloneDeep } from 'lodash'
 import { ActiveItem } from '../core/context'
 import 'antd/dist/antd.css'
 import './nested.scss'
 
 const { TabPane } = Tabs
-const { Column } = Table
 
 // 内置的非布局组件
 const BuiltInComponents = {

@@ -8,7 +8,7 @@ import { IDraggableList } from '../../../draggable/draggable'
 import './index.scss'
 
 export const Ashcan = () => {
-	const [list, setList] = useState<IDraggableList[]>([{ id: 'delete' }])
+	const [list] = useState<IDraggableList[]>([{ id: 'delete' }])
 
 	return (
 		<ReactSortable
