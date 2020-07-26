@@ -5,7 +5,7 @@ export const schema: ISchema = {
 	type: 'object',
 	properties: {
 		arrayTable: {
-			title: '数组',
+			title: '数组table',
 			maxItems: 3,
 			type: 'array',
 			'x-component': 'arraytable',

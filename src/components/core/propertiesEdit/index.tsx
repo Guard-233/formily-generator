@@ -23,7 +23,7 @@ import {
 } from '@formily/antd-components'
 import { schema } from './schema'
 import { ActiveItem } from '../context'
-import { CustomMonacoEditor } from '../../customComponent/costom-monaco-editor'
+import { CustomMonacoEditor } from '../../customComponent/custom-monaco-editor'
 
 const BuiltInComponents = {
 	Input,
@@ -93,12 +93,12 @@ export const PropertiesEdit = () => {
 					reducer={(state, action, form) => {
 						if (list.id === action.payload.values.id) {
 							setList(action.payload.values)
+							return state
 						}
-						return state
 					}}
 				>
 					{({ form: spyForm, state }) => {
-						return <div></div>
+						return <div>{JSON.stringify(state)}</div>
 					}}
 				</FormSpy>
 			</SchemaForm>

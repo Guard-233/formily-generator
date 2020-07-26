@@ -36,6 +36,7 @@ import { cloneDeep } from 'lodash'
 import { ActiveItem } from '../core/context'
 import 'antd/dist/antd.css'
 import './nested.scss'
+import { GenNonDuplicateID } from '../../utils'
 
 const { TabPane } = Tabs
 
@@ -162,6 +163,32 @@ export const Nested: INested = (args: any) => {
 
 	const { changeActive } = useContext(ActiveItem)
 
+	const ObjOnclick = (item: IDraggableList, list: IDraggableList[]) => {
+		return (event: React.MouseEvent) => {
+			event.stopPropagation()
+
+			if (props.allowActive) {
+				changeActive({
+					list: item,
+					setList: (newState) => {
+						setList(
+							list.map((card) => {
+								if (card.id === newState.id) {
+									return newState
+								}
+								return card
+							}),
+							null,
+							{
+								dragging: null
+							}
+						)
+					}
+				})
+			}
+		}
+	}
+
 	/**
 	 * 目前的默认渲染机制
 	 * @param item
@@ -192,16 +219,7 @@ export const Nested: INested = (args: any) => {
 					}}
 					schema={{
 						type: 'object',
-						properties: {
-							NO_NAME: {
-								'x-component': 'mega-layout',
-								'x-component-props': {
-									labelAlign: 'top',
-									full: true
-								},
-								properties: { [item.id]: DraggableToFormily([item]) }
-							}
-						}
+						properties: { [item.id]: DraggableToFormily([item]) }
 					}}
 				></SchemaForm>
 			</React.Fragment>
@@ -226,6 +244,8 @@ export const Nested: INested = (args: any) => {
 			case 'tabpane':
 				ObjRenderCom = TabPane
 				break
+			case 'mega-layout':
+				ObjRenderCom = FormMegaLayout
 		}
 
 		switch (item['x-component']?.toLocaleLowerCase()) {
@@ -241,6 +261,7 @@ export const Nested: INested = (args: any) => {
 								}
 							}}
 							component="div"
+							onClick={ObjOnclick(item, list)}
 						>
 							<ObjRenderCom {...item['x-component-props']}>
 								<Field x-component={'NestedObject'} name={item.id as string} />
@@ -248,76 +269,141 @@ export const Nested: INested = (args: any) => {
 						</SchemaForm>
 					</React.Fragment>
 				)
-			case 'tab':
+			case 'mega-layout':
+			case '':
 				return (
-					<React.Fragment>
-						<Tabs {...item['x-component-props']}>
-							{item.properties?.map((tabp) => {
-								return (
-									<TabPane {...tabp['x-component-props']} key={tabp.id as string}>
-										<Nested
-											{...props}
-											list={tabp.properties || []}
-											setList={(newState: IDraggableList | IDraggableList[]) => {
-												setList(
-													list.map((i) => {
-														if (item.id === i.id) {
-															return {
-																...item,
-																properties: item.properties!.map((t) => {
-																	if (t.id === tabp.id) {
-																		return {
-																			...tabp,
-																			id: tabp.id,
-																			properties: cloneDeep(newState) as IDraggableList[]
+					<React.Fragment key={item.id}>
+						<div
+							style={{
+								minHeight: '80px',
+								border: '1px solid blue'
+							}}
+							onClick={ObjOnclick(item, list)}
+						>
+							<Nested
+								{...props}
+								list={item.properties || []}
+								setList={nestedSetList(item)}
+							></Nested>
+						</div>
+					</React.Fragment>
+				)
+			case 'tab':
+				let active: string | undefined = undefined
+
+				const activeObj = {
+					add(activeKey: string | React.MouseEvent<HTMLElement, MouseEvent>) {
+						const id = GenNonDuplicateID()
+
+						setList(
+							list.map((i) => {
+								if (i.id === item.id) {
+									return {
+										...item,
+										properties: [
+											...item.properties,
+											{
+												id: 'schema' + id,
+												type: 'object',
+												'x-component': 'tabpane',
+												'x-component-props': {
+													tab: '选项' + id
+												},
+												properties: []
+											}
+										]
+									}
+								}
+								return i
+							}),
+							null,
+							{ dragging: null }
+						)
+					},
+					remove(activeKey: string | React.MouseEvent<HTMLElement, MouseEvent>) {
+						setList(
+							list.map((i) => {
+								if (i.id === item.id) {
+									return {
+										...item,
+										properties: item.properties?.filter((j) => {
+											return j.id !== activeKey
+										})
+									}
+								}
+								return i
+							}),
+							null,
+							{ dragging: null }
+						)
+					}
+				}
+
+				const onChange = (activeKey: string) => {
+					active = activeKey
+				}
+
+				const onEdit = (
+					targetKey: string | React.MouseEvent<HTMLElement>,
+					action: 'add' | 'remove'
+				) => {
+					activeObj[action](targetKey)
+				}
+
+				return (
+					<React.Fragment key={item.id}>
+						<div onClick={ObjOnclick(item, list)}>
+							<Tabs
+								{...item['x-component-props']}
+								type="editable-card"
+								onChange={onChange}
+								activeKey={active}
+								onEdit={onEdit}
+							>
+								{item.properties?.map((tabp) => {
+									return (
+										<TabPane {...tabp['x-component-props']} key={tabp.id as string}>
+											<Nested
+												{...props}
+												list={tabp.properties || []}
+												setList={(newState: IDraggableList | IDraggableList[]) => {
+													setList(
+														list.map((i) => {
+															if (item.id === i.id) {
+																return {
+																	...item,
+																	properties: item.properties!.map((t) => {
+																		if (t.id === tabp.id) {
+																			return {
+																				...tabp,
+																				id: tabp.id,
+																				properties: cloneDeep(
+																					newState
+																				) as IDraggableList[]
+																			}
 																		}
-																	}
-																	return t
-																})
+																		return t
+																	})
+																}
 															}
-														}
-														return i
-													}),
-													null,
-													{ dragging: null }
-												)
-											}}
-										></Nested>
-									</TabPane>
-								)
-							})}
-						</Tabs>
+															return i
+														}),
+														null,
+														{ dragging: null }
+													)
+												}}
+											></Nested>
+										</TabPane>
+									)
+								})}
+							</Tabs>
+						</div>
 					</React.Fragment>
 				)
 			default:
 				return (
 					<React.Fragment key={item.id}>
-						<Form
-							component={'div'}
-							onClick={(event) => {
-								event.stopPropagation()
-
-								if (props.allowActive) {
-									changeActive({
-										list: item,
-										setList: (newState) => {
-											setList(
-												list.map((card) => {
-													if (card.id === newState.id) {
-														return newState
-													}
-													return card
-												}),
-												null,
-												{
-													dragging: null
-												}
-											)
-										}
-									})
-								}
-							}}
-						>
+						<Form component={'div'} onClick={ObjOnclick(item, list)}>
 							<Card {...item['x-component-props']}>
 								<Nested
 									{...props}
@@ -338,7 +424,11 @@ export const Nested: INested = (args: any) => {
 	 */
 	const ArrayRender = (item: IDraggableList) => {
 		return (
-			<Card {...item['x-component-props']} title={item['x-component']}>
+			<Card
+				onClick={ObjOnclick(item, list)}
+				{...item['x-component-props']}
+				title={item.title}
+			>
 				<Nested
 					{...props}
 					list={(item.items as IDraggableList[]) || []}

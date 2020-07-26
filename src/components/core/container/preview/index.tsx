@@ -102,8 +102,8 @@ export const Preview = (props: ISchema) => {
 						...ArrayComponents
 					}}
 					schema={props}
-					onSubmit={(...args) => {
-						console.log(args)
+					onSubmit={(value) => {
+						console.log(value)
 					}}
 				>
 					<FormButtonGroup>

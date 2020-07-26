@@ -51,6 +51,19 @@ export const schema: ISchema = {
 					properties: {}
 				}
 			}
+		},
+		FormMegaLayout: {
+			'x-component': 'mega-layout',
+			'x-component-props': {
+				labelCol: 4
+			},
+			type: 'object',
+			properties: {}
+		},
+		pureObject: {
+			type: 'object',
+			'x-component': '',
+			properties: {}
 		}
 	}
 }
