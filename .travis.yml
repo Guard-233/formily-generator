@@ -1,9 +1,0 @@
-# @format
-
-# .travis.yml
-language: typescript
-sudo: false
-node_js:
-  - 12.16.0
-script:
-  - bash scripts/deploy-to-gh-pages.sh
