@@ -1,44 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- @format -->
 
-## Available Scripts
+# Formily 可视化 schema 编辑器
 
-In the project directory, you can run:
+![preview](/public/markdown/preview.png)
 
-### `yarn start`
+### 使用
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+git clone https://github.com/Guard-233/formily-generator.git
+cd ./formily-generator
+yarn start
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+**注意，使用本工具之前，最好先了解[Formily](https://formilyjs.org)的使用方式**
 
-### `yarn test`
+### 界面说明
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 左侧
 
-### `yarn build`
+左侧主要是可拖动的组件，分为基础组件，布局组件，数组组件
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+在此主要说明布局组件与数组组件的使用方式
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+##### 布局组件
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+所有的布局组件除了 pureObject 之外均为样式组件，如果想让数据结构与样式同意，则需要给布局组件内部嵌套一层 pureObject。
 
-### `yarn eject`
+**pureObject 存在**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![preview](/public/markdown/pureObj.png)
+![preview](/public/markdown/pureObj-p.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**pureObject 不存在**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![preview](/public/markdown/formCard.png)
+![preview](/public/markdown/formCard-p.png)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+##### 数组组件
 
-## Learn More
+数组组件目前有两种 ArrayCard 与 ArrayTable
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**注意，因数组的 items 属性是 ISchema | ISchema[] 所以具体的组件需要拖放在内部的对象中，而不是数组本身**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+因表格组件的拖拽显示不太直观，所以数组组件在拖拽区域如下图所示
+
+![preview](/public/markdown/array.png)
+
+而最终预览的形态，则以表格的形式正常显示
+
+![preview](/public/markdown/array-p.png)
+
+#### 中部
+
+中部区域为组件可拖放的区域，需要注意的是，中部区域的组件预览效果与最终效果有出入，请以点击预览按钮后的页面为准
+
+#### 右侧
+
+点击中部区域的任意一个以拖放的组件，都可以在右侧进行相应的属性编辑，具体可编辑的属性，可以看[Formily](https://formilyjs.org)的官方文档

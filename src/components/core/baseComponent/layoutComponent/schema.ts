@@ -20,12 +20,7 @@ export const schema: ISchema = {
 			'x-component-props': {
 				title: 'formblock'
 			},
-			properties: {
-				aa: {
-					'x-component': 'input',
-					title: 'test'
-				}
-			}
+			properties: {}
 		},
 		tabs: {
 			type: 'object',

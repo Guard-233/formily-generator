@@ -280,6 +280,7 @@ export const Nested: INested = (args: any) => {
 							}}
 							onClick={ObjOnclick(item, list)}
 						>
+							<div>{item['x-component'] || 'pureObject'}</div>
 							<Nested
 								{...props}
 								list={item.properties || []}

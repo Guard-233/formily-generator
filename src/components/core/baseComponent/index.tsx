@@ -14,8 +14,11 @@ export const BaseComponent = () => {
 				overflow: 'auto'
 			}}
 		>
+			<div>基础组件</div>
 			<BuiltInComponent></BuiltInComponent>
+			<div>数组组件</div>
 			<ArrayComponent></ArrayComponent>
+			<div>布局组件</div>
 			<LayoutComponent></LayoutComponent>
 		</div>
 	)
