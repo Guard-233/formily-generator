@@ -88,6 +88,7 @@ export const Preview = (props: ISchema) => {
 				visible={state.visible}
 				onOk={handleOk}
 				onCancel={handleCancel}
+				destroyOnClose={true}
 				width={'80%'}
 				centered={true}
 				bodyStyle={{

@@ -290,7 +290,9 @@ export const Nested: INested = (args: any) => {
 					</React.Fragment>
 				)
 			case 'tab':
-				let active: string | undefined = undefined
+				let active: string | undefined = 'tab-1'
+
+				console.log(active)
 
 				const activeObj = {
 					add(activeKey: string | React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -358,7 +360,7 @@ export const Nested: INested = (args: any) => {
 								{...item['x-component-props']}
 								type="editable-card"
 								onChange={onChange}
-								activeKey={active}
+								// activeKey={active}
 								onEdit={onEdit}
 							>
 								{item.properties?.map((tabp) => {

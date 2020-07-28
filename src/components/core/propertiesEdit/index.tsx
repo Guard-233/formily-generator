@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { SchemaForm, LifeCycleTypes, FormSpy } from '@formily/antd'
 import {
 	Input,
@@ -63,6 +63,8 @@ export const PropertiesEdit = () => {
 
 	const { list, setList } = active
 
+	const [id, setId] = useState<string>('')
+
 	return (
 		<div
 			style={{
@@ -91,7 +93,11 @@ export const PropertiesEdit = () => {
 				<FormSpy
 					selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
 					reducer={(state, action, form) => {
-						if (list.id === action.payload.values.id) {
+						if (id !== action.payload.values.id) {
+							setId(action.payload.values.id)
+						}
+
+						if (list.id === id) {
 							setList(action.payload.values)
 							return state
 						}

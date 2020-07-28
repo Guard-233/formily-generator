@@ -4,6 +4,7 @@ import React from 'react'
 import { BuiltInComponent } from './builtInComponent'
 import { ArrayComponent } from './arrayComponent'
 import { LayoutComponent } from './layoutComponent'
+import { PageHeader } from 'antd'
 
 export const BaseComponent = () => {
 	return (
@@ -14,11 +15,11 @@ export const BaseComponent = () => {
 				overflow: 'auto'
 			}}
 		>
-			<div>基础组件</div>
+			<PageHeader className="site-page-header" backIcon={false} title="基础组件" />
 			<BuiltInComponent></BuiltInComponent>
-			<div>数组组件</div>
+			<PageHeader className="site-page-header" backIcon={false} title="数组组件" />
 			<ArrayComponent></ArrayComponent>
-			<div>布局组件</div>
+			<PageHeader className="site-page-header" backIcon={false} title="布局组件" />
 			<LayoutComponent></LayoutComponent>
 		</div>
 	)
