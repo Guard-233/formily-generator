@@ -4,7 +4,11 @@
 
 ![preview](/public/markdown/preview.png)
 
-### 使用
+### 预览
+
+可以直接点击[本链接](https://guard-233.github.io/formily-generator/)在线使用
+
+### clone 并使用
 
 ```bash
 git clone https://github.com/Guard-233/formily-generator.git
