@@ -1,13 +1,13 @@
 /** @format */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ReactDraggable } from '../../draggable'
 import { IDraggableList } from '../../draggable/draggable'
 import { GenNonDuplicateID } from '../../../utils'
 import { Preview } from './preview'
 import { EditSchema } from './editSchema'
 import { DraggableToFormily } from '../../../utils/transform'
-import { Layout } from 'antd'
+import { Layout, Tag } from 'antd'
 import { Ashcan } from './ashcan'
 
 const { Content, Header } = Layout
@@ -47,10 +47,21 @@ export const Container = () => {
 	const [list, setList] = useState<Array<IDraggableList>>([
 		{
 			type: 'object',
-			id: 'schema',
-			title: 'test'
+			id: 'schema'
 		}
 	])
+
+	const tag = <Tag color="warning">请拖拽至下方框体内部</Tag>
+
+	useEffect(() => {
+		if (list.length > 1) {
+			setList(
+				list.filter((item) => {
+					return item.id === 'schema'
+				})
+			)
+		}
+	}, [list])
 
 	return (
 		<Layout
@@ -76,6 +87,7 @@ export const Container = () => {
 				}}
 			>
 				<ErrorBoundary>
+					{list.length > 1 ? tag : ''}
 					<ReactDraggable
 						list={list}
 						setList={setList}
