@@ -2,7 +2,7 @@
 
 # Formily 可视化 schema 编辑器
 
-![preview](/public/markdown/preview.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/preview.png)
 
 ### 预览
 
@@ -32,13 +32,13 @@ yarn start
 
 **pureObject 存在**
 
-![preview](/public/markdown/pureObj.png)
-![preview](/public/markdown/pureObj-p.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/pureObj.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/pureObj-p.png)
 
 **pureObject 不存在**
 
-![preview](/public/markdown/formCard.png)
-![preview](/public/markdown/formCard-p.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/formCard.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/formCard-p.png)
 
 ##### 数组组件
 
@@ -48,11 +48,11 @@ yarn start
 
 因表格组件的拖拽显示不太直观，所以数组组件在拖拽区域如下图所示
 
-![preview](/public/markdown/array.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/array.png)
 
 而最终预览的形态，则以表格的形式正常显示
 
-![preview](/public/markdown/array-p.png)
+![preview](https://raw.githubusercontent.com/Guard-233/formily-generator/master/public/markdown/array-p.png)
 
 #### 中部
 
