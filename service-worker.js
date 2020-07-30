@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/formily-generator/precache-manifest.aa22fa2d678d140408f749f94423d5e4.js"
+  "/formily-generator/precache-manifest.3d042a92a7f8d129337a80bff986f651.js"
 );
 
 self.addEventListener('message', (event) => {

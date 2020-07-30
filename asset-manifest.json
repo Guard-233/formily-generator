@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/formily-generator/static/css/main.bd57f31a.chunk.css",
-    "main.js": "/formily-generator/static/js/main.dfe5b801.chunk.js",
-    "main.js.map": "/formily-generator/static/js/main.dfe5b801.chunk.js.map",
+    "main.js": "/formily-generator/static/js/main.91209f0e.chunk.js",
+    "main.js.map": "/formily-generator/static/js/main.91209f0e.chunk.js.map",
     "runtime-main.js": "/formily-generator/static/js/runtime-main.34fafc2c.js",
     "runtime-main.js.map": "/formily-generator/static/js/runtime-main.34fafc2c.js.map",
     "static/css/2.3595438d.chunk.css": "/formily-generator/static/css/2.3595438d.chunk.css",
@@ -17,7 +17,7 @@
     "index.html": "/formily-generator/index.html",
     "json.worker.js": "/formily-generator/json.worker.js",
     "json.worker.js.map": "/formily-generator/json.worker.js.map",
-    "precache-manifest.aa22fa2d678d140408f749f94423d5e4.js": "/formily-generator/precache-manifest.aa22fa2d678d140408f749f94423d5e4.js",
+    "precache-manifest.3d042a92a7f8d129337a80bff986f651.js": "/formily-generator/precache-manifest.3d042a92a7f8d129337a80bff986f651.js",
     "service-worker.js": "/formily-generator/service-worker.js",
     "static/css/2.3595438d.chunk.css.map": "/formily-generator/static/css/2.3595438d.chunk.css.map",
     "static/css/main.bd57f31a.chunk.css.map": "/formily-generator/static/css/main.bd57f31a.chunk.css.map",
@@ -29,6 +29,6 @@
     "static/css/2.3595438d.chunk.css",
     "static/js/2.12f80f31.chunk.js",
     "static/css/main.bd57f31a.chunk.css",
-    "static/js/main.dfe5b801.chunk.js"
+    "static/js/main.91209f0e.chunk.js"
   ]
 }

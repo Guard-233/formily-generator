@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/formily-generator/editor.worker.js"
   },
   {
-    "revision": "e2ac8a201798214e5bec7cd15c2ca69d",
+    "revision": "f5e99bf9bca3ffa3ad5c9ea092404f6d",
     "url": "/formily-generator/index.html"
   },
   {
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/formily-generator/static/css/2.3595438d.chunk.css"
   },
   {
-    "revision": "aca94544d7a256d456bc",
+    "revision": "afda734129681b07884e",
     "url": "/formily-generator/static/css/main.bd57f31a.chunk.css"
   },
   {
@@ -36,8 +36,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/formily-generator/static/js/4.366f2757.chunk.js"
   },
   {
-    "revision": "aca94544d7a256d456bc",
-    "url": "/formily-generator/static/js/main.dfe5b801.chunk.js"
+    "revision": "afda734129681b07884e",
+    "url": "/formily-generator/static/js/main.91209f0e.chunk.js"
   },
   {
     "revision": "8a8344992151876f4e36",
